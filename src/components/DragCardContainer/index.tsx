@@ -1,13 +1,12 @@
-import React from 'react';
-import { useCallback, useState, forwardRef, useImperativeHandle, useEffect } from 'react';
+import { useCallback, useState, useEffect } from 'react';
 import { DndProvider } from 'react-dnd';
 import { HTML5Backend } from 'react-dnd-html5-backend';
-import type { CardParams, DragCardItem, SizeEnum } from '../DragCard/type';
+import { DragCardItem } from '../DragCard/type';
 import DragCardList from '../DragCardList';
-import type { CardItem, CardList, DragCardContainerInstance, DragCardContainerProps } from './type';
+import { CardItem, CardList, DragCardContainerProps } from './type';
 import { changeCardList, copyCardArr, getCardList, getChildrenLenth, transformList2Cards } from './utils';
 
-const DragCardContainer = forwardRef((props: DragCardContainerProps, ref) => {
+const DragCardContainer = (props: DragCardContainerProps) => {
     const { cardList, onChange, getBackgroundColor, children } = props;
     const [cards, setCards] = useState<CardList>(transformList2Cards(cardList));
 
@@ -20,27 +19,6 @@ const DragCardContainer = forwardRef((props: DragCardContainerProps, ref) => {
         onChange(getCardList(list), type);
     };
 
-    /** 设置卡片大小 */
-    const setCardSize = useCallback((card: CardParams, size: SizeEnum) => {
-        setCards((prevState) => {
-            const copyCardList = copyCardArr(prevState);
-            const row = copyCardList.find((item) => item.key === card.rowKey);
-            const column = row?.children.find((item) => item.id === card.id);
-            if (!column || column.size === size) {
-                return copyCardList;
-            }
-            column.size = size;
-            changeCardList(copyCardList);
-            _onChange(copyCardList, 'cardSize');
-            return copyCardList;
-        });
-    }, []);
-
-    useImperativeHandle(ref, (): DragCardContainerInstance => {
-        return {
-            setCardSize,
-        };
-    });
     const moveCard = useCallback(
         (dragCard: DragCardItem, hoverCard: DragCardItem, replaceIndex = 0) =>
             requestAnimationFrame(() => {
@@ -128,6 +106,6 @@ const DragCardContainer = forwardRef((props: DragCardContainerProps, ref) => {
             })}
         </div>
     );
-});
+};
 
 export default DragCardContainer;

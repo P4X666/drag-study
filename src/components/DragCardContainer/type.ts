@@ -1,7 +1,7 @@
 import type { ReactNode } from 'react';
-import type { CardParams, SizeEnum } from '../DragCard/type';
+import type { CardParams } from '../DragCard/type';
 
-export type CardItem = { id: string | number; title: string; size: SizeEnum };
+export type CardItem = { id: string | number; title: string; };
 
 export type CardListItem = {
     /** 只做内部标识 */
@@ -20,5 +20,5 @@ export type DragCardContainerProps = {
 
 export type DragCardContainerInstance = {
     /** 设置卡片大小 */
-    setCardSize: (card: CardParams, size: SizeEnum) => void;
+    setCardSize: (card: CardParams) => void;
 };

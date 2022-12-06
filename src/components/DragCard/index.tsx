@@ -3,19 +3,12 @@ import React, { cloneElement, useState } from 'react';
 import { useRef } from 'react';
 import { useDrag, useDrop } from 'react-dnd';
 import styles from './index.less';
-import { SizeEnum } from './type';
 import type { DragCardProps, DragCardItem } from './type';
-
-const style = {
-    small: { width: 'calc(100% / 3 - 8px)', marginRight: '24px' },
-    middle: { width: 'calc(100% / 2 - 12px)', marginRight: '24px' },
-    large: { width: '100%' },
-};
 
 const CARD = 'card';
 
 const DragCard: FC<DragCardProps & DragCardItem> = (props) => {
-    const { id, index, size = SizeEnum.MIDDLE, rowKey, columnIndex, moveCard, children } = props;
+    const { id, index, rowKey, columnIndex, moveCard, children } = props;
 
     const ref = useRef<HTMLDivElement>(null);
 
@@ -46,7 +39,7 @@ const DragCard: FC<DragCardProps & DragCardItem> = (props) => {
             const hoverClientX = clientOffset!.x - hoverBoundingRect.left;
 
             const _handle = (replaceIndex: 0 | 1 = 0) => {
-                moveCard({ ...dragCard }, { id, rowKey, columnIndex, index, size }, replaceIndex);
+                moveCard({ ...dragCard }, { id, rowKey, columnIndex, index }, replaceIndex);
                 dragCard.index = index;
             };
             if (dragIndex < hoverIndex && hoverClientX > hoverBoundingRect.width * 0.25) {
@@ -67,7 +60,7 @@ const DragCard: FC<DragCardProps & DragCardItem> = (props) => {
     const [{ isDragging }, drag] = useDrag({
         type: CARD,
         item: (): DragCardItem => {
-            return { index, id, rowKey, columnIndex, size };
+            return { index, id, rowKey, columnIndex };
         },
         collect: (monitor) => ({
             isDragging: monitor.isDragging(),
@@ -79,12 +72,12 @@ const DragCard: FC<DragCardProps & DragCardItem> = (props) => {
 
     drag(drop(ref));
 
-    const child = children as React.ReactElement;
+    const child = children as unknown as React.ReactElement;
     const childProps = { ...child?.props, setCanDrag, isOver };
     const cloneChildren = cloneElement(child, childProps);
 
     return (
-        <div ref={ref} className={styles.card} style={{ ...style[size], opacity }}>
+        <div ref={ref} className={styles.card} style={{ opacity }}>
             {cloneChildren}
         </div>
     );
