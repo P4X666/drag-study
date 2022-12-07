@@ -24,7 +24,7 @@ export const changeCardList = (list: CardList) => {
     let nextKey = -1;
     for (let i = 0; i < list.length; i++) {
         const item = list[i];
-        const [, rowKey] = item.key.split(SEPARATOR);
+        const [ , rowKey ] = item.key.split(SEPARATOR);
         const numRowKey = +rowKey;
         if (nextKey < numRowKey) {
             nextKey = numRowKey;

@@ -13,10 +13,10 @@ type DragCardListProps = Pick<DragCardContainerProps, 'getBackgroundColor'> & {
 };
 
 const DragCardList: FC<PropsWithChildren<DragCardListProps>> = (props) => {
-    const { children, cards, item: dragItem, index, moveRowCard, getBackgroundColor } = props;
+    const { children, item: dragItem, index, moveRowCard, getBackgroundColor } = props;
     const ref = useRef<HTMLDivElement>(null);
 
-    const [{ isOver }, drop] = useDrop({
+    const [ { isOver }, drop ] = useDrop({
         accept: 'card',
         collect(monitor) {
             return {
@@ -51,8 +51,6 @@ const DragCardList: FC<PropsWithChildren<DragCardListProps>> = (props) => {
                 moveRowCard({ ...dragCard }, { rowKey: dragItem.key }, arrIndex);
                 dragCard.index = index;
             };
-
-            const hoverRow = cards.find((card) => card.key === dragItem.key);
 
             if (dragIndex < hoverIndex && hoverClientY > hoverMiddleY * 0.25) {
                 // console.log('在上面，想下来', ' to bottom ');

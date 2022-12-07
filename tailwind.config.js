@@ -1,5 +1,5 @@
+// npx tailwindcss init -p 生成配置文件
 /** 
- * npx tailwindcss init -p 生成配置文件
  * @type {import('tailwindcss').Config}
  *  */
 module.exports = {
