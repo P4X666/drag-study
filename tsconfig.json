@@ -30,7 +30,8 @@
     // 编译时不生成任何文件（只进行类型检查）
     "noEmit": true,
     // 指定将 JSX 编译成什么形式
-    "jsx": "react-jsx"
+    "jsx": "react-jsx",
+    "baseUrl": "./",
   },
   // 指定允许 ts 处理的目录
   "include": ["src"]
