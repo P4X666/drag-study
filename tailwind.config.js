@@ -16,7 +16,7 @@ module.exports = {
     utils: true,
     logs: true,
     rtl: false,
-    prefix: "",
+    prefix: "tw_",
     darkTheme: "dark",
   },
 }
