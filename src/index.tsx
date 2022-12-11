@@ -1,10 +1,10 @@
 import ReactDOM from 'react-dom/client';
 import { BrowserRouter as Router } from 'react-router-dom';
 import { ConfigProvider, } from 'antd';
-import zhCN from 'antd/locale/zh_CN';
+import zhCN from 'antd/es/locale/zh_CN';
 import App from './pages/App';
 import reportWebVitals from './reportWebVitals';
-import 'antd/dist/reset.css';
+import 'antd/dist/antd.css';
 // import './index.css';
 
 const root = ReactDOM.createRoot(document.getElementById('root') as HTMLElement);

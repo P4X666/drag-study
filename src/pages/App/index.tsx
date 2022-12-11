@@ -20,7 +20,7 @@ function App() {
         element={
           <Suspense fallback={<PageLoading tip="页面加载中..." />}>
             {/* 此处可做权限判断 */}
-            <RouteComp />
+            <div style={{width: '1200px', margin: '0 auto', padding: '200px 0'}}><RouteComp /></div>
           </Suspense>
         }
       />
