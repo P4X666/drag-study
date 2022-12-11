@@ -1,2 +1,1 @@
-# drag-study
-react 拖拽的相关学习
+# 该分支主要研究 react-dnd 的拖拽
