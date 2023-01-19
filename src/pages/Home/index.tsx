@@ -6,8 +6,10 @@ const Home = () => {
   const navigate = useNavigate();
   return (
     <div className={styles.index}>
-      <h3>拖拽的简单展示</h3>
-      <Button type="primary" onClick={() => navigate('/antd')}>
+      <Button className="mb-8" block type="primary" onClick={() => navigate('/simple')}>
+        拖拽的简单展示
+      </Button>
+      <Button block type="primary" onClick={() => navigate('/antd')}>
         与 antd 结合
       </Button>
     </div>
