@@ -6,6 +6,7 @@
     }
   },
   "rules": {
+    "no-irregular-whitespace": "off",
     "semi": ["error", "always"],
     "quotes": [
       "error",

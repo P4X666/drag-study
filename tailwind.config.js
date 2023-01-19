@@ -10,17 +10,17 @@ module.exports = {
   /** 处理 antd 与 tailwindcss 的样式冲突 禁止tailwindcss的默认属性 */
   corePlugins: {
     preflight: false
-  }
-  // plugins: [require("daisyui")],
+  },
+  plugins: [require("daisyui")],
   // https://daisyui.com/docs/config/
-  // daisyui: {
-  //   styled: true,
-  //   themes: true,
-  //   base: true,
-  //   utils: true,
-  //   logs: true,
-  //   rtl: false,
-  //   prefix: "tw_",
-  //   darkTheme: "dark",
-  // },
+  daisyui: {
+    styled: true,
+    themes: true,
+    base: true,
+    utils: true,
+    logs: true,
+    rtl: false,
+    // prefix: "tw_",
+    darkTheme: "dark",
+  },
 }

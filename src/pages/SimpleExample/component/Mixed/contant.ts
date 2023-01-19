@@ -1,0 +1,1 @@
+export const DRAGTYPE = 'CARD';
