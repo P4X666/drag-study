@@ -1,10 +1,10 @@
 import { useDrag } from 'react-dnd';
 import { DRAGTYPE } from './contant';
 
-type CardProps={label:string; id:string;}
+type CardProps = { label: string; id: string };
 
 const Card = (props: CardProps) => {
-    const {label, id} = props;
+  const { label, id } = props;
   const [ { isDragging }, drag ] = useDrag({
     type: DRAGTYPE,
     item: () => ({

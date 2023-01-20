@@ -33,11 +33,20 @@ const Slider = () => {
         cards.splice(atIndex, 0, card);
 
         setcardList([ ...cards ]);
+
+        // setcardList((prevState) => {
+        //   const newCards = prevState.map(item => ({...item}));
+        //   newCards.splice(index, 1);
+        //   newCards.splice(atIndex, 0, card);
+        //   return newCards;
+        // });
       }
     };
 
   const addCard = (atIndex:number, card:CardItemType) => {
       setcardList((prevState) => {
+        console.log(card, 'cardcardcard');
+
         const newCards = prevState.map(item => ({...item}));
         newCards.splice(atIndex, 0, card);
         return newCards;

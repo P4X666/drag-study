@@ -1,6 +1,9 @@
+import dayjs from 'dayjs';
+import { useRef } from 'react';
 import { useDrop, useDrag } from 'react-dnd';
 import { DRAGTYPE } from './contant';
 import { CardItemType } from './type';
+// import { debounce } from 'lodash-es';
 
 type SortableCardProps = {
   index: number;
@@ -24,7 +27,8 @@ type SortableCardType = Pick<SortableCardProps, 'id' | 'index' | 'label'> & {
 const SortableCard = (props: SortableCardProps) => {
   const { id, label, moveCard, addCard, findCard, index } = props;
   const originalIndex = findCard(id)!.index;
-
+  const ref = useRef<HTMLDivElement>(null);
+  const flag = useRef(false);
   const [ { isDragging }, drag ] = useDrag({
     type: DRAGTYPE,
     item: {
@@ -48,6 +52,9 @@ const SortableCard = (props: SortableCardProps) => {
       };
     },
     end: (item, monitor) => {
+      flag.current = false;
+      console.log('结束----------------------------拖拽');
+
       const itemDropped = monitor.didDrop();
       /** 当盒子被拖出到外部时，松手后，恢复原位 */
       if (item && !itemDropped) {
@@ -55,6 +62,10 @@ const SortableCard = (props: SortableCardProps) => {
       }
     },
   });
+
+  // const _addCard = debounce((atIndex:number, card:CardItemType) => {
+  //   addCard(atIndex, card);
+  // }, 300);
 
   const [ { isOver }, drop ] = useDrop({
     accept: DRAGTYPE,
@@ -65,25 +76,51 @@ const SortableCard = (props: SortableCardProps) => {
         isOver: monitor.isOver(),
       };
     },
-    hover: (item) => {
-      const cardBeingDragged = item as SortableCardType;
+    hover: (item, monitor) => {
+      if (!ref.current) {
+        return;
+      }
+      /** 若本次拖拽未结束 */
+      if (flag.current) return;
+      const cardBeingDragged = { ...(item as SortableCardType) };
+      /** 设置 index 防止闪动 */
       if (cardBeingDragged.index === index) {
         return;
       }
+      // const dragIndex = cardBeingDragged.index;
+      // const hoverBoundingRect = ref.current?.getBoundingClientRect();
+      // const clientOffset = monitor.getClientOffset()!;
+      // const hoverClientY = clientOffset.y - hoverBoundingRect.top;
+
+      // /** 排除未过半的拖动 防止闪动 */
+      // if (dragIndex < index && hoverClientY < hoverBoundingRect.height * 0.5) {
+      //   return;
+      // }
+      // if (dragIndex > index && hoverClientY > hoverBoundingRect.height * 0.5) {
+      //   return;
+      // }
       console.log(cardBeingDragged.index, index);
 
       /** 如果是从外部传入，则新增，否则移动位置 */
       if (cardBeingDragged.cardFromSearch) {
+        // TODO: 新增的盒子id会重复 若在拖拽开始时赋值一个唯一id即可解决
         // if (!findCard(cardBeingDragged.id)) {
-        const { index: overIndex } = findCard(id)!;
-        cardBeingDragged.originalIndex = overIndex;
-        cardBeingDragged.cardFromSearch = false;
-        cardBeingDragged.isStillBeingDragged = true;
-        cardBeingDragged.index = index;
-        addCard(overIndex, {
-          ...cardBeingDragged,
-          isDragging: true,
-        });
+          const { index: overIndex } = findCard(id)!;
+          cardBeingDragged.originalIndex = overIndex;
+          cardBeingDragged.cardFromSearch = false;
+          cardBeingDragged.isStillBeingDragged = true;
+
+          cardBeingDragged.index = index;
+          console.log('新增------------------', dayjs().format('YYYY-MM-DD hh:mm:ss'));
+          flag.current = true;
+          requestAnimationFrame(() => {
+            addCard(overIndex, {
+              ...cardBeingDragged,
+              isDragging: true,
+              // originId: cardBeingDragged.id,
+              // id: dayjs().format('YYYY-MM-DD hh:mm:ss'),
+            });
+          });
         // }
       } else {
         if (cardBeingDragged.id !== id) {
@@ -95,10 +132,11 @@ const SortableCard = (props: SortableCardProps) => {
     },
   });
 
+  drag(drop(ref));
+
   return (
     <div
-      ref={(node) => drag(drop(node))}
-      id={id}
+      ref={ref}
       className="mb-4 mr-2 px-3 py-1 bg-slate-200 cursor-move"
       style={{
         opacity: isDragging ? 0.2 : 1,
