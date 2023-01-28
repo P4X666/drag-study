@@ -46,7 +46,9 @@ const Slider = () => {
   const addCard = (atIndex:number, card:CardItemType) => {
       setcardList((prevState) => {
         console.log(card, 'cardcardcard');
-
+        if (prevState.find(item => item.id === card.id)) {
+          return prevState;
+        }
         const newCards = prevState.map(item => ({...item}));
         newCards.splice(atIndex, 0, card);
         return newCards;

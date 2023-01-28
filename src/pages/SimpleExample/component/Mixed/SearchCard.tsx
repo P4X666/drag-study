@@ -1,3 +1,4 @@
+import dayjs from 'dayjs';
 import { useDrag } from 'react-dnd';
 import { DRAGTYPE } from './contant';
 
@@ -7,12 +8,16 @@ const Card = (props: CardProps) => {
   const { label, id } = props;
   const [ { isDragging }, drag ] = useDrag({
     type: DRAGTYPE,
-    item: () => ({
-      cardFromSearch: true,
-      label,
-      id,
-      originalIndex: '???',
-    }),
+    item: () => {
+      console.log('begin --------------- 开始拖拽');
+      return {
+        cardFromSearch: true,
+        label,
+        originalIndex: '???',
+        originId: id,
+        id: dayjs().format('YYYY-MM-DD hh:mm:ss'),
+      };
+    },
     collect: (monitor) => ({
       isDragging: !!monitor.isDragging(),
     }),
