@@ -4,8 +4,8 @@ import { ConfigProvider, } from 'antd';
 import zhCN from 'antd/es/locale/zh_CN';
 import App from './pages/App';
 import reportWebVitals from './reportWebVitals';
-import 'antd/dist/antd.css';
-// import './index.css';
+
+import './index.css';
 
 const root = ReactDOM.createRoot(document.getElementById('root') as HTMLElement);
 

@@ -1,6 +1,13 @@
+/** 处理 antd 与 tailwindcss 的样式冲突 */
+@import 'antd/dist/reset.css';
+
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+* {
+  font-size: 14px;
+}
 
 body {
   margin: 0;
@@ -9,6 +16,7 @@ body {
     sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+  font-size: 16px;
 }
 
 code {
