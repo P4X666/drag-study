@@ -1,11 +1,10 @@
 import { Button } from 'antd';
 import { useNavigate } from 'react-router-dom';
-import styles from './index.less';
 
 const Home = () => {
   const navigate = useNavigate();
   return (
-    <div className={styles.index}>
+    <div>
       <Button className="mb-8" block type="primary" onClick={() => navigate('/simple')}>
         拖拽的简单展示
       </Button>
