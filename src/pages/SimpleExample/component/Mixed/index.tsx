@@ -7,7 +7,7 @@ const Mixed = () => {
   return (
       <DndProvider backend={HTML5Backend}>
         <div
-          className="text-center flex mt-4"
+          className="flex mt-4"
         >
           <SearchList></SearchList>
           <Slider></Slider>

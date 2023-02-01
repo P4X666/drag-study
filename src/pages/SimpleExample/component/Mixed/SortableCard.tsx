@@ -1,4 +1,4 @@
-import { useRef } from 'react';
+import React, { useRef } from 'react';
 import { useDrop, useDrag } from 'react-dnd';
 import { DRAGTYPE } from './contant';
 import { CardItemType } from './type';
@@ -14,6 +14,7 @@ type SortableCardProps = {
     index: number;
   } | null;
   deleteCard: (atIndex: number) => void;
+  lastHoverCard: React.MutableRefObject<CardItemType | undefined>;
 };
 
 type SortableCardType = Pick<SortableCardProps, 'id' | 'index' | 'label'> & {
@@ -23,7 +24,8 @@ type SortableCardType = Pick<SortableCardProps, 'id' | 'index' | 'label'> & {
 };
 
 const SortableCard = (props: SortableCardProps) => {
-  const { id, label, moveCard, addCard, findCard, index } = props;
+  const { id, label, moveCard, addCard, findCard, index, lastHoverCard }
+    = props;
   const originalIndex = findCard(id)!.index;
   const ref = useRef<HTMLDivElement>(null);
   const [ { isDragging }, drag ] = useDrag({
@@ -52,20 +54,16 @@ const SortableCard = (props: SortableCardProps) => {
       };
     },
     end: (item, monitor) => {
-      console.log('结束----------------------------拖拽');
-
+      console.log('结束-------------------拖拽', monitor);
       const itemDropped = monitor.didDrop();
-      /** 当盒子被拖出到外部时，松手后，恢复原位 */
-      if (item && !itemDropped) {
-        moveCard(item.id, item.originalIndex);
+      if (lastHoverCard.current && itemDropped) {
+        moveCard(item.id, lastHoverCard.current.index!);
       }
     },
   });
 
   const [ { isOver }, drop ] = useDrop({
     accept: DRAGTYPE,
-    /** 禁止移出 */
-    canDrop: () => false,
     collect(monitor) {
       return {
         isOver: monitor.isOver(),
@@ -92,6 +90,7 @@ const SortableCard = (props: SortableCardProps) => {
       // if (dragIndex > index && hoverClientY > hoverBoundingRect.height * 0.5) {
       //   return;
       // }
+      console.log(cardBeingDragged, 'cardBeingDragged====');
       /** 如果是从外部传入，则新增，否则移动位置 */
       if (cardBeingDragged.cardFromSearch) {
         const { index: overIndex } = findCard(id)!;
@@ -100,17 +99,16 @@ const SortableCard = (props: SortableCardProps) => {
         cardBeingDragged.isStillBeingDragged = true;
 
         cardBeingDragged.index = index;
-        requestAnimationFrame(() => {
-          addCard(overIndex, {
-            ...cardBeingDragged,
-            isDragging: true,
-          });
+        addCard(overIndex, {
+          ...cardBeingDragged,
+          isDragging: true,
         });
       } else {
         if (cardBeingDragged.id !== id) {
-          const { index: overIndex } = findCard(id)!;
+          // const { index: overIndex } = findCard(id)!;
           cardBeingDragged.index = index;
-          moveCard(cardBeingDragged.id, overIndex);
+          // moveCard(cardBeingDragged.id, index);
+          lastHoverCard.current = cardBeingDragged;
         }
       }
     },
@@ -121,7 +119,7 @@ const SortableCard = (props: SortableCardProps) => {
   return (
     <div
       ref={ref}
-      className="mb-4 mr-2 px-3 py-1 bg-slate-200 cursor-move"
+      className="inline-block mb-4 mr-2 px-3 py-1 bg-slate-200 cursor-move"
       style={{
         opacity: isDragging ? 0.2 : 1,
         borderLeft: isOver ? '1px solid red' : 'none',
