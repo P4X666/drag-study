@@ -19,7 +19,7 @@ const Card = (props: CardProps) => {
       };
     },
     collect: (monitor) => ({
-      isDragging: !!monitor.isDragging(),
+      isDragging: monitor.isDragging(),
     }),
   });
 

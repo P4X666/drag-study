@@ -7,6 +7,7 @@ const Initialization:FC<PropsWithChildren> = (props) => {
   // 默认进来的页面
   useEffect(() => {
     if (pathname !== '/login') {
+      // 发送用户权限，菜单权限的请求
       // 判断权限
     }
   }, [ pathname ]);
