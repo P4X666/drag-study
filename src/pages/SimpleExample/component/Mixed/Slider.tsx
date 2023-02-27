@@ -60,7 +60,7 @@ index, atIndex, prevState[atIndex].label, '被挤到后面啦'
   //     },
   //     [ cards ]);
 
-  // eslint-disable-next-line no-unused-vars
+  // eslint-disable-next-line no-unused-vars, @typescript-eslint/no-unused-vars
   const [ { isOverSlider }, drop ] = useDrop({
     accept: DRAGTYPE,
     collect: (monitor) => {
