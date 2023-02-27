@@ -1,5 +1,6 @@
 import { Collapse } from 'antd';
 import Mixed from './component/Mixed';
+import MultiDirectional from './component/MultiDirectional';
 import styles from './index.less';
 
 const { Panel } = Collapse;
@@ -16,7 +17,7 @@ const SimpleExample = () => {
           <p>横向拖拽</p>
         </Panel>
         <Panel header="多方向拖拽" key="3">
-          <p>多方向拖拽</p>
+          <MultiDirectional />
         </Panel>
         <Panel header="多场景混合拖拽" key="4">
           <p>场景描述：</p>
