@@ -6,6 +6,7 @@
   "license": "MIT",
   "dependencies": {
     "antd": "^5.1.5",
+    "classnames": "^2.3.2",
     "daisyui": "^2.42.1",
     "dayjs": "^1.11.7",
     "eslint-config-prettier": "^8.6.0",

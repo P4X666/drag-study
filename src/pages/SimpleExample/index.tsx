@@ -1,4 +1,5 @@
 import { Collapse } from 'antd';
+import Horizontal from './component/Horizontal';
 import Mixed from './component/Mixed';
 import MultiDirectional from './component/MultiDirectional';
 import VerticalExample from './component/Vertical';
@@ -11,11 +12,11 @@ const SimpleExample = () => {
     <div className={styles.index}>
       <p className="text-xl font-bold">拖拽的简单展示</p>
       <Collapse accordion bordered={false}>
-        <Panel header="纵向拖拽" key="1">
+        <Panel header="纵向拖拽" extra="适用于对盒子宽高明确要求的场景" key="1">
           <VerticalExample />
         </Panel>
-        <Panel header="横向拖拽" key="2">
-          <p>横向拖拽</p>
+        <Panel header="横向拖拽" extra="适用于对盒子宽度明确要求不管的场景" key="2">
+          <Horizontal />
         </Panel>
         <Panel header="多方向拖拽" key="3">
           <MultiDirectional />

@@ -1,4 +1,4 @@
-import type { Identifier, XYCoord } from 'dnd-core';
+import type { XYCoord } from 'dnd-core';
 import { FC } from 'react';
 import { useRef } from 'react';
 import { useDrag, useDrop } from 'react-dnd';
@@ -15,17 +15,11 @@ type DragItem = Pick<CardProps, 'id' | 'index'> & { type: string };
 
 const Card: FC<CardProps> = ({ id, text, index, moveCard }) => {
   const ref = useRef<HTMLDivElement>(null);
-  const [ { handlerId }, drop ] = useDrop<
+  const [ , drop ] = useDrop<
     DragItem,
-    void,
-    { handlerId: Identifier | null }
+    void
   >({
     accept: ItemTypes.CARD,
-    collect(monitor) {
-      return {
-        handlerId: monitor.getHandlerId(),
-      };
-    },
     hover(item: DragItem, monitor) {
       if (!ref.current) {
         return;
@@ -51,12 +45,12 @@ const Card: FC<CardProps> = ({ id, text, index, moveCard }) => {
       // Get pixels to the top
       const hoverClientY = (clientOffset as XYCoord).y - hoverBoundingRect.top;
 
-      // 向下拖拽
+      // 向下拖拽 但是鼠标的位置低于下面盒子高度的一半
       if (dragIndex < hoverIndex && hoverClientY < hoverMiddleY) {
         return;
       }
 
-      // 向上拖拽
+      // 向上拖拽 但是鼠标的位置低于下面盒子高度的一半
       if (dragIndex > hoverIndex && hoverClientY > hoverMiddleY) {
         return;
       }
@@ -85,7 +79,7 @@ const Card: FC<CardProps> = ({ id, text, index, moveCard }) => {
   drag(drop(ref));
 
   return (
-    <div ref={ref} data-handler-id={handlerId}>
+    <div ref={ref}>
       {isDragging ? (
         <div ref={dragPreview} className="border border-solid border-gray-300" />
       ) : (
