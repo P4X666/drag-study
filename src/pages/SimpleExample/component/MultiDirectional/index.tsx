@@ -1,15 +1,12 @@
-import Card from './Card';
+import { DndProvider } from 'react-dnd';
+import { HTML5Backend } from 'react-dnd-html5-backend';
+import Container from './Container';
 
 const MultiDirectional = () => {
-  const cards = Array(50)
-    .fill('')
-    .map((_item, index) => ({ name: `card ${index}` }));
   return (
-    <div className="bg-white rounded-lg min-h-16 flex flex-wrap pl-4 pt-4 pr-4">
-      {cards.map((item) => {
-        return <Card key={item.name} title={item.name} />;
-      })}
-    </div>
+    <DndProvider backend={HTML5Backend}>
+      <Container />
+    </DndProvider>
   );
 };
 
