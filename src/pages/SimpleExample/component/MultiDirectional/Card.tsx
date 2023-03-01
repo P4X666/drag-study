@@ -24,7 +24,6 @@ type DragItem = Pick<CardProps, 'id' | 'index'> & { type: string };
 const Card: FC<CardProps> = ({ id, text, index, moveCard, lastHoverCard }) => {
   const ref = useRef<HTMLDivElement>(null);
 
-  // eslint-disable-next-line no-unused-vars
   const [ { isOver }, drop ] = useDrop<DragItem, void, { isOver: boolean }>({
     accept: ItemTypes.CARD,
     collect(monitor) {
@@ -48,16 +47,15 @@ const Card: FC<CardProps> = ({ id, text, index, moveCard, lastHoverCard }) => {
        * 是否为向后拖拽 保证都是放到盒子的前面
        * 如果不做处理，则向前拖拽，盒子会到hover的盒子前面；向后拖拽，则盒子会到hover的盒子后面
        *  */
-      // const toback = dragIndex < hoverIndex;
-      // lastHoverCard.current = {
-      //   dragIndex,
-      //   hoverIndex: toback ? hoverIndex - 1 : hoverIndex,
-      // };
-      lastHoverCard.current = { dragIndex, hoverIndex };
+      const toback = dragIndex < hoverIndex;
+      lastHoverCard.current = {
+        dragIndex,
+        hoverIndex: toback ? hoverIndex - 1 : hoverIndex,
+      };
     },
   });
 
-  const [ { isDragging, dragItem }, drag, dragPreview ] = useDrag({
+  const [ { isDragging }, drag, dragPreview ] = useDrag({
     type: ItemTypes.CARD,
     item: () => {
       console.log('开始拖拽', index);
@@ -65,7 +63,6 @@ const Card: FC<CardProps> = ({ id, text, index, moveCard, lastHoverCard }) => {
     },
     collect: (monitor) => ({
       isDragging: monitor.isDragging(),
-      dragItem: monitor.getItem(),
     }),
     end: (item) => {
       console.log('结束拖拽', item);
@@ -78,9 +75,6 @@ const Card: FC<CardProps> = ({ id, text, index, moveCard, lastHoverCard }) => {
     },
   });
   drag(drop(ref));
-  if (isOver) {
-    console.log(dragItem, 'dragItem', index);
-  }
 
   return (
     <div ref={ref} className="flex mr-2">
@@ -92,8 +86,7 @@ const Card: FC<CardProps> = ({ id, text, index, moveCard, lastHoverCard }) => {
             'bg-white cursor-move mb-2 py-2 px-4',
             ...(isOver
               ? [
-                  'border-solid border-red-500 border-0',
-                  dragItem.index < index ? 'border-r' : 'border-l',
+                  'border-solid border-red-500 border-0 border-l',
                 ]
               : ''),
           ])}

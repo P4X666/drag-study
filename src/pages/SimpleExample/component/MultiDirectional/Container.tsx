@@ -1,7 +1,9 @@
 import update from 'immutability-helper';
 import { FC, useRef } from 'react';
 import { useCallback, useState } from 'react';
+import { useDrop } from 'react-dnd';
 import Card from './Card';
+import { ItemTypes } from './constant';
 
 export interface Item {
   id: string;
@@ -26,13 +28,30 @@ const Container: FC = () => {
       }));
   }, []);
 
+  const [ , drop ] = useDrop({
+    accept: ItemTypes.CARD,
+    // collect: (monitor) => {
+    //     return {
+    //         isOverSlider: monitor.isOver(),
+    //     };
+    // },
+    drop(item, monitor) {
+        const didDrop = monitor.didDrop();
+        const dropItem = item as {index: number};
+        if (!didDrop) {
+            /** 如果在内部拖拽时，没有放到任何一个盒子上面，则将其放到最后 */
+            moveCard(dropItem.index, cards.length);
+        }
+    },
+});
+
   const lastHoverCard = useRef<{
     dragIndex: number;
     hoverIndex: number;
   }>();
 
   return (
-    <div className="flex">
+    <div className="flex flex-wrap" ref={drop}>
       {cards.map((card, index) => {
         return (
           <Card
