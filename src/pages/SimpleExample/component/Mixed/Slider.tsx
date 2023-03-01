@@ -1,12 +1,17 @@
-import { useState, useRef } from 'react';
+import React, { useState, useRef, useEffect } from 'react';
 import SortableCard from './SortableCard';
 import { useDrop } from 'react-dnd';
 import { DRAGTYPE } from './contant';
 import { CardItemType } from './type';
 
-const Slider = () => {
-  const [ cards, setcardList ] = useState<CardItemType[]>([]);
+type SliderProps = {
+  isDragTagEnd: boolean;
+  setIsDragTagEnd: React.Dispatch<React.SetStateAction<boolean>>;
+};
 
+const Slider = (props: SliderProps) => {
+  const { isDragTagEnd, setIsDragTagEnd } = props;
+  const [ cards, setcardList ] = useState<CardItemType[]>([]);
   const findCard = (id: string) => {
     const card = cards.find((c) => `${c.id}` === id);
     return card
@@ -26,10 +31,6 @@ const Slider = () => {
       const { card, index } = cardFound;
       const newCards = prevState.map((item) => ({ ...item }));
       newCards.splice(index, 1);
-      console.log(card.label, '移动新位置啦');
-      console.log(
-index, atIndex, prevState[atIndex].label, '被挤到后面啦'
-);
       newCards.splice(atIndex, 0, card);
       return newCards;
     });
@@ -47,20 +48,6 @@ index, atIndex, prevState[atIndex].label, '被挤到后面啦'
     });
   };
 
-  const deleteCard = (atIndex: number) => {
-    cards.splice(atIndex, 1);
-  };
-
-  //   const cardAlreadyExists = useCallback((id: string) => {
-  //       if (cards.find(card => card.id === id)) {
-  //         return true;
-  //       }
-
-  //       return false;
-  //     },
-  //     [ cards ]);
-
-  // eslint-disable-next-line no-unused-vars, @typescript-eslint/no-unused-vars
   const [ { isOverSlider }, drop ] = useDrop({
     accept: DRAGTYPE,
     collect: (monitor) => {
@@ -68,21 +55,33 @@ index, atIndex, prevState[atIndex].label, '被挤到后面啦'
         isOverSlider: monitor.isOver(),
       };
     },
-    drop(item) {
+    drop(item, monitor) {
+      const didDrop = monitor.didDrop();
       const dropItem = item as CardItemType;
-      const selectdCard = findCard(dropItem.id);
-      if (!selectdCard) {
-        addCard(cards.length, {
-          ...dropItem,
-          cardFromSearch: false,
-          isDragging: false,
-        });
-        return;
+      /** 如果没有落点没有在任何一个盒子附近，则最外层兜底 */
+      if (!didDrop) {
+        /** 如果来自左侧，则直接新增到最后 */
+        if (dropItem.cardFromSearch) {
+          addCard(cards.length, {
+            ...dropItem,
+            cardFromSearch: false,
+            isDragging: true,
+          });
+          return;
+        }
+        /** 如果在内部拖拽时，没有放到任何一个盒子上面，则将其放到最后 */
+        moveCard(dropItem.id, cards.length);
       }
-      const { card, index } = selectdCard;
-      cards.splice(index, 1, { ...card, isDragging: false });
     },
   });
+
+  useEffect(() => {
+    /** 只要拖拽的不在上面时，状态为false */
+    if (!isOverSlider) {
+      setIsDragTagEnd(false);
+    }
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [ isOverSlider ]);
 
   const lastHoverCard = useRef<CardItemType>();
 
@@ -111,11 +110,9 @@ index, atIndex, prevState[atIndex].label, '被挤到后面啦'
             label={card.label}
             moveCard={moveCard}
             addCard={addCard}
-            // cardAlreadyExists={cardAlreadyExists}
-            findCard={findCard}
-            deleteCard={deleteCard}
             lastHoverCard={lastHoverCard}
-          ></SortableCard>
+            isDragTagEnd={isDragTagEnd}
+          />
         );
       })}
     </div>

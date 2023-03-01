@@ -1,11 +1,16 @@
 import dayjs from 'dayjs';
+import React from 'react';
 import { useDrag } from 'react-dnd';
 import { DRAGTYPE } from './contant';
 
-type CardProps = { label: string; id: string };
+type CardProps = {
+  label: string;
+  id: string;
+  setIsDragTagEnd: React.Dispatch<React.SetStateAction<boolean>>;
+ };
 
 const Card = (props: CardProps) => {
-  const { label, id } = props;
+  const { label, id, setIsDragTagEnd } = props;
   const [ { isDragging }, drag ] = useDrag({
     type: DRAGTYPE,
     item: () => {
@@ -15,12 +20,15 @@ const Card = (props: CardProps) => {
         label,
         originalIndex: '???',
         originId: id,
-        id: dayjs().format('YYYY-MM-DD hh:mm:ss'),
+        id: dayjs().format('YYYY-MM-DD hh:mm:ss.SSS'),
       };
     },
     collect: (monitor) => ({
       isDragging: monitor.isDragging(),
     }),
+    end: () => {
+      setIsDragTagEnd(true);
+  },
   });
 
   return (
