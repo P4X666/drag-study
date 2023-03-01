@@ -1,13 +1,18 @@
 import { Button } from 'antd';
-import styles from './index.less';
+import { useNavigate } from 'react-router-dom';
 
 const Home = () => {
-
-  return <div className={styles.index}>
-    <h3>拖拽的简单展示</h3>
-    <h3>与 antd 结合</h3>
-    <Button type="primary">Button</Button>
-  </div>;
+  const navigate = useNavigate();
+  return (
+    <div>
+      <Button className="mb-8" block type="primary" onClick={() => navigate('/simple')}>
+        拖拽的简单展示
+      </Button>
+      <Button block type="primary" onClick={() => navigate('/antd')}>
+        与 antd 结合
+      </Button>
+    </div>
+  );
 };
 
 export default Home;

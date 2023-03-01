@@ -1,11 +1,12 @@
-{
-  "extends": ["react-app", "react-app/jest"],
+module.exports = {
+  "extends": ["react-app", "react-app/jest", "prettier"],
   "parserOptions": {
     "ecmaFeatures": {
       "legacyDecorators": true
     }
   },
   "rules": {
+    "no-irregular-whitespace": "off",
     "semi": ["error", "always"],
     "quotes": [
       "error",

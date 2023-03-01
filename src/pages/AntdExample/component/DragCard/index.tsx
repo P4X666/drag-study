@@ -1,4 +1,6 @@
-import React, { cloneElement, useState, useRef, FC } from 'react';
+import type { FC } from 'react';
+import React, { cloneElement } from 'react';
+import { useRef } from 'react';
 import { useDrag, useDrop } from 'react-dnd';
 import styles from './index.less';
 import type { DragCardProps, DragCardItem } from './type';
@@ -6,7 +8,7 @@ import type { DragCardProps, DragCardItem } from './type';
 const CARD = 'card';
 
 const DragCard: FC<DragCardProps & DragCardItem> = (props) => {
-  const { id, index, rowKey, columnIndex, moveCard, children } = props;
+  const { id, index, moveCard, children } = props;
 
   const ref = useRef<HTMLDivElement>(null);
 
@@ -27,51 +29,51 @@ const DragCard: FC<DragCardProps & DragCardItem> = (props) => {
       if (dragIndex === hoverIndex) {
         return;
       }
-      // 如果不是同一行，则可以交给 DragCardList 处理
-      if (dragCard.rowKey !== rowKey) {
-        return;
-      }
+
       const hoverBoundingRect = ref.current?.getBoundingClientRect();
       // 偏移量
       const clientOffset = monitor.getClientOffset();
-      const hoverClientX = clientOffset!.x - hoverBoundingRect.left;
+      const hoverClientY = clientOffset!.y - hoverBoundingRect.top;
 
-      const _handle = (replaceIndex: 0 | 1 = 0) => {
-        moveCard({ ...dragCard }, { id, rowKey, columnIndex, index }, replaceIndex);
+      const _handle = () => {
+        moveCard(dragCard.id, id);
         dragCard.index = index;
       };
-      if (dragIndex < hoverIndex && hoverClientX > hoverBoundingRect.width * 0.25) {
-        // console.log('在前面，想到后面去', 'to back');
-        _handle(1);
+      if (
+        dragIndex < hoverIndex
+        && hoverClientY > hoverBoundingRect.height * 0.25
+      ) {
+        console.log('to bottom');
+        _handle();
         return;
       }
-      if (dragIndex > hoverIndex && hoverClientX < hoverBoundingRect.width * 0.75) {
-        // console.log('在后面，想到前面去', 'to before');
-        _handle(0);
+      if (
+        dragIndex > hoverIndex
+        && hoverClientY < hoverBoundingRect.height * 0.75
+      ) {
+        console.log('to top');
+        _handle();
         return;
       }
     },
   });
 
-  const [ canDrag, setCanDrag ] = useState(true);
-
-  const [ { isDragging }, drag ] = useDrag({
+  const [ { isDragging }, drag, preview ] = useDrag({
     type: CARD,
-    item: (): DragCardItem => {
-      return { index, id, rowKey, columnIndex };
+    item: (): { id: number; index: number } => {
+      return { index, id };
     },
     collect: (monitor) => ({
       isDragging: monitor.isDragging(),
     }),
-    canDrag: () => canDrag,
   });
 
   const opacity = isDragging ? 0 : 1;
 
-  drag(drop(ref));
+  preview(drop(ref));
 
-  const child = children as unknown as React.ReactElement;
-  const childProps = { ...child?.props, setCanDrag, isOver };
+  const child = children as React.ReactElement;
+  const childProps = { ...child?.props, isOver, drag };
   const cloneChildren = cloneElement(child, childProps);
 
   return (
