@@ -1,8 +1,7 @@
 import { useDrag, useDrop } from 'react-dnd';
 import React, { useRef, useEffect } from 'react';
 import type { CardItemType } from './type';
-import styles from './index.less';
-import { DRAGTYPE } from './contant';
+import { DRAGTYPE } from './constant';
 
 type ItemType = {
   id: string;
@@ -123,14 +122,13 @@ const SortableCard = (props: SortableCardProps) => {
     return (
         <div
             ref={ref}
-            className={styles.dragTag}
+            className="bg-slate-200 cursor-move py-2 px-4 h-9 rounded-lg mr-2 mb-2 relative"
             style={{
                 opacity: isDragging ? 0.4 : 1,
-                backgroundColor: 'transparent',
             }}
         >
             {/* 当有标签在其上时，显示该竖线 */}
-            {isOver && <div className={styles.verticalLine} />}
+            {isOver && <div className="absolute h-full w-0.5 -left-px -top-0.5 bg-orange-500" />}
             {label}
         </div>
     );

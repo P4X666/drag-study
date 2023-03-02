@@ -1,7 +1,7 @@
 import dayjs from 'dayjs';
 import React from 'react';
 import { useDrag } from 'react-dnd';
-import { DRAGTYPE } from './contant';
+import { DRAGTYPE } from './constant';
 
 type CardProps = {
   label: string;
@@ -34,7 +34,7 @@ const Card = (props: CardProps) => {
   return (
     <div
       ref={drag}
-      className="kbd kbd-lg mb-4 cursor-move"
+      className="kbd kbd-lg mb-4 cursor-move mr-2 w-24"
       style={{
         opacity: isDragging ? '0.5' : '1',
       }}

@@ -1,7 +1,7 @@
 import React, { useState, useRef, useEffect } from 'react';
 import SortableCard from './SortableCard';
 import { useDrop } from 'react-dnd';
-import { DRAGTYPE } from './contant';
+import { DRAGTYPE } from './constant';
 import { CardItemType } from './type';
 
 type SliderProps = {
@@ -100,7 +100,7 @@ const Slider = (props: SliderProps) => {
   // }, [ isOverSlider, cards ]);
 
   return (
-    <div ref={drop} className="w-1/2 border border-solid rounded-lg p-4">
+    <div ref={drop} className="w-1/2 border border-solid rounded-lg p-4 flex flex-wrap">
       {cards.map((card, index) => {
         return (
           <SortableCard
