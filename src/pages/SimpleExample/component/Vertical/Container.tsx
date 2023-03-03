@@ -5,10 +5,6 @@ import { useCallback, useState } from 'react';
 import Card from './Card';
 import { CARDS } from './constant';
 
-const style = {
-  width: 400,
-};
-
 export interface Item {
   id: string;
   text: string;
@@ -31,7 +27,7 @@ const Container: FC = () => {
   }, []);
 
   return (
-    <div style={style}>
+    <div className="w-96">
       {cards.map((card, index) => {
         return (
           <Card

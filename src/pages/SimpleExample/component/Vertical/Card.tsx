@@ -61,7 +61,7 @@ const Card: FC<CardProps> = ({ id, text, index, moveCard }) => {
     },
   });
 
-  const [ { isDragging }, drag, dragPreview ] = useDrag({
+  const [ { isDragging }, drag ] = useDrag({
     type: ItemTypes.CARD,
     item: () => {
       console.log('开始拖拽', index);
@@ -81,7 +81,7 @@ const Card: FC<CardProps> = ({ id, text, index, moveCard }) => {
   return (
     <div ref={ref}>
       {isDragging ? (
-        <div ref={dragPreview} className="border border-solid border-gray-300" />
+        <div className="border border-solid border-gray-300" />
       ) : (
         <div className="bg-white cursor-move mb-2 py-2 px-4 border border-dashed border-gray-300">
           {text}

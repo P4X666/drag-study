@@ -55,7 +55,7 @@ const Card: FC<CardProps> = ({ id, text, index, moveCard, lastHoverCard }) => {
     },
   });
 
-  const [ { isDragging }, drag, dragPreview ] = useDrag({
+  const [ { isDragging }, drag ] = useDrag({
     type: ItemTypes.CARD,
     item: () => {
       console.log('开始拖拽', index);
@@ -77,23 +77,15 @@ const Card: FC<CardProps> = ({ id, text, index, moveCard, lastHoverCard }) => {
   drag(drop(ref));
 
   return (
-    <div ref={ref} className="flex mr-2">
-      {isDragging ? (
-        <div ref={dragPreview} />
-      ) : (
-        <div
-          className={classnames([
-            'bg-white cursor-move mb-2 py-2 px-4',
-            ...(isOver
-              ? [
-                  'border-solid border-red-500 border-0 border-l',
-                ]
-              : ''),
-          ])}
-        >
-          {text}
-        </div>
-      )}
+    <div ref={ref} className={classnames([ 'flex mr-2', isDragging ? 'opacity-40' : 'opacity-100' ])}>
+      <div
+        className={classnames([
+          'bg-white cursor-move mb-2 py-2 px-4',
+          ...(isOver ? [ 'border-solid border-red-500 border-0 border-l' ] : ''),
+        ])}
+      >
+        {text}
+      </div>
     </div>
   );
 };

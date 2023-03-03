@@ -1,9 +1,10 @@
 // import type { XYCoord } from 'dnd-core';
 import React, { FC } from 'react';
 import { useRef } from 'react';
-import { useDrag, useDrop } from 'react-dnd';
+import { useDrag, useDrop, DragPreviewImage } from 'react-dnd';
 import { ItemTypes } from './constant';
 import classnames from 'classnames';
+import DogGif from 'src/assets/image/SimpleExample/dog.gif';
 
 export interface CardProps {
   id: string;
@@ -53,7 +54,7 @@ const Card: FC<CardProps> = ({ id, text, index, moveCard, lastHoverCard }) => {
       //   dragIndex,
       //   hoverIndex: toback ? hoverIndex - 1 : hoverIndex,
       // };
-      lastHoverCard.current = {dragIndex, hoverIndex};
+      lastHoverCard.current = { dragIndex, hoverIndex };
     },
   });
 
@@ -83,10 +84,9 @@ const Card: FC<CardProps> = ({ id, text, index, moveCard, lastHoverCard }) => {
   }
 
   return (
-    <div ref={ref} className="flex mr-2">
-      {isDragging ? (
-        <div ref={dragPreview} />
-      ) : (
+    <>
+      <DragPreviewImage connect={dragPreview} src={DogGif} />
+      <div ref={ref} className={classnames([ 'flex mr-2', isDragging ? 'opacity-40' : 'opacity-100' ])}>
         <div
           className={classnames([
             'bg-white cursor-move mb-2 py-2 px-4',
@@ -100,8 +100,8 @@ const Card: FC<CardProps> = ({ id, text, index, moveCard, lastHoverCard }) => {
         >
           {text}
         </div>
-      )}
-    </div>
+      </div>
+    </>
   );
 };
 
